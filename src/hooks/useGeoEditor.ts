@@ -42,15 +42,12 @@ export const useGeoEditor = () => {
         try {
             let newGeoJSON = layer.toGeoJSON();
 
-            // 1. Special Handling for Circle
             if (rawType === 'circle') {
                 const center = [layer.getLatLng().lng, layer.getLatLng().lat] as [number, number];
                 const radius = layer.getRadius();
                 newGeoJSON = circleToPolygon(center, radius);
                 newGeoJSON.properties = { ...newGeoJSON.properties, radius };
             }
-
-            // 2. Prepare Properties
             const assignedType = normalizeType(rawType);
             const shapeId = uuidv4();
 
@@ -63,55 +60,41 @@ export const useGeoEditor = () => {
 
             console.log("Processed GeoJSON:", newGeoJSON);
 
-            // 3. Limit Check
             const currentCount = features.filter(f => f.properties.shapeType === assignedType).length;
             const maxLimit = LIMITS[assignedType as keyof typeof LIMITS];
 
             if (maxLimit !== undefined && currentCount >= maxLimit) {
                 showToast(`Limit reached for ${assignedType}!`, 'error');
-                layer.remove(); // Only remove if rejected
+                layer.remove(); 
                 return;
             }
-
-            // 4. Spatial Checks (SAFE MODE)
-            // Only run checks if there are existing features.
-            // If map is empty, ALWAYS allow the first shape.
             if (features.length > 0 && (newGeoJSON.geometry.type === 'Polygon' || newGeoJSON.geometry.type === 'MultiPolygon')) {
 
                 console.log("Running Spatial Checks...");
 
-                // A. Containment
                 if (isContained(newGeoJSON, features)) {
                     showToast(`Blocked: Shape is fully inside another!`, 'error');
-                    layer.remove(); // Remove bad shape
+                    layer.remove(); 
                     return;
                 }
 
-                // B. Trimming
                 const trimmed = getTrimmedGeometry(newGeoJSON, features);
 
                 if (!trimmed) {
                     showToast(`Blocked: Shape fully overlaps existing area.`, 'error');
-                    layer.remove(); // Remove bad shape
+                    layer.remove(); 
                     return;
                 }
-
-                // Update geometry with trimmed version
                 newGeoJSON.geometry = trimmed.geometry;
             }
-
-            // 5. Success! Save to State
             console.log("Saving Shape to State...");
             setFeatures(prev => [...prev, newGeoJSON as MapFeature]);
 
-            // CRITICAL: Only remove the blue draft layer AFTER everything is successful.
-            // This prevents "Ghost" shapes if the code crashes above.
             setTimeout(() => layer.remove(), 0);
 
         } catch (error) {
             console.error("CRITICAL ERROR in handleCreated:", error);
             showToast("System Error: Could not save shape.", 'error');
-            // Note: We do NOT remove the layer here, so you can see something went wrong.
         }
     };
 
