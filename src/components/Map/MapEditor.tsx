@@ -4,14 +4,10 @@ import { EditControl } from 'react-leaflet-draw';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-
-// Component Imports
 import { useGeoEditor } from '../../hooks/useGeoEditor';
 import { getFeatureStyle } from './LayerStyles';
 import Toolbar from './Toolbar';
 import Toast from '../UI/Toast';
-
-// Fix Leaflet Icons
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -23,12 +19,10 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// 🟢 FIX: Configuration Object Outside Component (Static)
-// Taaki re-render hone par Drawing Tool reset na ho
 const DRAW_CONFIG = {
-    rectangle: { shapeOptions: { color: '#2196F3' } }, // Blue preview
-    polygon: { shapeOptions: { color: '#FF5722' } },   // Orange preview
-    circle: { shapeOptions: { color: '#9C27B0' } },    // Purple preview
+    rectangle: { shapeOptions: { color: '#2196F3' } }, 
+    polygon: { shapeOptions: { color: '#FF5722' } },   
+    circle: { shapeOptions: { color: '#9C27B0' } },   
     polyline: { shapeOptions: { color: '#333' } },
     circlemarker: false,
     marker: false,
@@ -69,7 +63,7 @@ const MapEditor: React.FC = () => {
                         <EditControl
                             position="topright"
                             onCreated={handleCreated}
-                            draw={DRAW_CONFIG} // 🟢 FIX: Passing static config
+                            draw={DRAW_CONFIG} 
                             edit={{ edit: false, remove: false }}
                         />
                     </FeatureGroup>
