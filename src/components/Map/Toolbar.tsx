@@ -9,16 +9,16 @@ interface ToolbarProps {
 const Toolbar: React.FC<ToolbarProps> = ({ featureCount, onExport, onClear }) => {
     return (
         <div style={{
-            height: '60px', // Fixed height
+            height: '60px', 
             padding: '0 20px',
-            background: '#1a1a1a', // Thoda dark background
+            background: '#1a1a1a', 
             color: '#fff',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             borderBottom: '1px solid #333',
             boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-            zIndex: 1000 // Map ke upar dikhe
+            zIndex: 1000 
         }}>
             {/* Left Side: Title */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
