@@ -23,7 +23,7 @@ export const useGeoEditor = () => {
 
     const closeToast = () => setToast(prev => ({ ...prev, visible: false }));
 
-    // Helper: Type name fix
+
     const normalizeType = (type: string) => {
         if (type === 'rectangle') return 'Rectangle';
         if (type === 'polygon') return 'Polygon';
