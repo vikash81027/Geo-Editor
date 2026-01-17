@@ -1,4 +1,3 @@
-/* Purana sab uda do aur ye paste karo */
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -9,16 +8,14 @@
     background-color: #242424;
 }
 
-/* Ye zaroori hai full height ke liye */
 html, body, #root {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Scrollbars hatao */
+    overflow: hidden; 
 }
 
-/* Leaflet map fix */
 .leaflet-container {
     width: 100%;
     height: 100%;
